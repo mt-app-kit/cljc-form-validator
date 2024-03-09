@@ -1,11 +1,26 @@
 
-(ns form-validator.form.env
+(ns form-validator.input.env
     (:require [local-state.api :as local-state]
               [fruits.map.api :as map]
               [fruits.vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
+
+(defn get-input-error
+  ; @description
+  ; Returns the previously stored ':error' value of the input (if any).
+  ;
+  ; @param (keyword) input-id
+  ;
+  ; @usage
+  ; (get-input-error :my-input)
+  ; =>
+  ; "Please fill out this field!"
+  ;
+  ; @return (*)
+  [input-id]
+  (local-state/get-state :form-validator input-id :error))
 
 (defn get-input-value
   ; @description
@@ -106,6 +121,6 @@
        (letfn [(f0 [{:keys [test-f error]}]
                    (if test-f (if-not (-> input-value test-f)
                                       (-> error (or :invalid-input-value)))))]
-              (if-let [error (vector/first-result validators f0)]
-                      {:input-id input-id :input-value internal-value :input-valid? false :error error}
-                      {:input-id input-id :input-value internal-value :input-valid? true}))))
+              (if-let [error (vector/first-result input-validators f0)]
+                      {:input-id input-id :input-value input-value :input-valid? false :error error}
+                      {:input-id input-id :input-value input-value :input-valid? true}))))

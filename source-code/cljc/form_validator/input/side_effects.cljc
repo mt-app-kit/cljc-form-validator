@@ -62,10 +62,10 @@
   ; Applies the validators of the input ...
   ; ... and in case of ANY validator failed, it ...
   ;     ... stores the ':error' value of the first failed validator in the form validator state,
-  ;     ... fires the ':on-invalid-f' function (if any),
+  ;     ... fires the given ':on-invalid-f' function (if any),
   ; ... and in case of NO validator failed, it ...
   ;     ... clears the previously stored ':error' value (if any) from the form validator state,
-  ;     ... fires the ':on-valid-f' function (if any),
+  ;     ... fires the given ':on-valid-f' function (if any),
   ;
   ; @param (keyword) input-id
   ; @param (keyword) validation-props
@@ -82,7 +82,7 @@
   ;  :input-id (keyword)
   ;  :input-valid? (boolean)
   ;  :input-value (*)}
-  [input-id {:keys [on-invalid-f on-valid-f] :as props}]
+  [input-id {:keys [on-invalid-f on-valid-f]}]
   (let [validation-result (input.env/get-input-validation-result input-id)]
        (letfn [(f0 [_] (local-state/update-state! :form-validator dissoc-in [input-id :error]))
                (f1 [%] (local-state/update-state! :form-validator assoc-in  [input-id :error] (:error %)))
@@ -104,21 +104,27 @@
   ; Validates the input in case it is registered with the '{:validate-when-change? true}' setting.
   ;
   ; @param (keyword) input-id
+  ; @param (keyword) validation-props
+  ; {:on-invalid-f (function)(opt)
+  ;  :on-valid-f (function)(opt)}
   ;
   ; @usage
-  ; (input-changed :my-input)
-  [input-id]
+  ; (input-changed :my-input {...})
+  [input-id validation-props]
   (if (input.env/validate-input-when-change? input-id)
-      (validate-input!                       input-id)))
+      (validate-input!                       input-id validation-props)))
 
 (defn input-left
   ; @description
   ; Validates the input in case it is registered with the '{:validate-when-leave? true}' setting.
   ;
   ; @param (keyword) input-id
+  ; @param (keyword) validation-props
+  ; {:on-invalid-f (function)(opt)
+  ;  :on-valid-f (function)(opt)}
   ;
   ; @usage
-  ; (input-left :my-input)
-  [input-id]
+  ; (input-left :my-input {...})
+  [input-id validation-props]
   (if (input.env/validate-input-when-leave? input-id)
-      (validate-input!                      input-id)))
+      (validate-input!                      input-id validation-props)))

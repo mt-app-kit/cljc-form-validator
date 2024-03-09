@@ -16,6 +16,7 @@
 (def validate-form!     form.side-effects/validate-form!)
 
 ; @redirect (form-validator.input.env/*)
+(def get-input-error             input.env/get-input-error)
 (def get-input-value             input.env/get-input-value)
 (def get-input-validators        input.env/get-input-validators)
 (def validate-input-when-change? input.env/validate-input-when-change?)
