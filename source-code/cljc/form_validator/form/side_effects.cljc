@@ -1,8 +1,8 @@
 
 (ns form-validator.form.side-effects
-    (:require [form-validator.form.env :as form.env]
+    (:require [form-validator.form.env           :as form.env]
               [form-validator.input.side-effects :as input.side-effects]
-              [fruits.vector.api :as vector]))
+              [fruits.vector.api                 :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
