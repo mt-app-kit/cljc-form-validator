@@ -44,6 +44,39 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
+(defn validate-input-when-change?
+  ; @description
+  ; Returns TRUE if the input is registered with the '{:validate-when-change? true}' setting.
+  ;
+  ; @param (keyword) input-id
+  ;
+  ; @usage
+  ; (validate-input-when-change? :my-input)
+  ; =>
+  ; true
+  ;
+  ; @return (boolean)
+  [input-id]
+  (local-state/get-state :form-validator input-id :validate-when-change?))
+
+(defn validate-input-when-leave?
+  ; @description
+  ; Returns TRUE if the input is registered with the '{:validate-when-leave? true}' setting.
+  ;
+  ; @param (keyword) input-id
+  ;
+  ; @usage
+  ; (validate-input-when-leave? :my-input)
+  ; =>
+  ; true
+  ;
+  ; @return (boolean)
+  [input-id]
+  (local-state/get-state :form-validator input-id :validate-when-leave?))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
 (defn get-input-validation-result
   ; @description
   ; - Applies the validators of the input and returns the result of the validation.

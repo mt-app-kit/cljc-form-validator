@@ -18,6 +18,8 @@
 ; @redirect (form-validator.input.env/*)
 (def get-input-value             input.env/get-input-value)
 (def get-input-validators        input.env/get-input-validators)
+(def validate-input-when-change? input.env/validate-input-when-change?)
+(def validate-input-when-leave?  input.env/validate-input-when-leave?)
 (def get-input-validation-result input.env/get-input-validation-result)
 
 ; @redirect (form-validator.input.side-effects/*)
@@ -25,3 +27,5 @@
 (def dereg-form-input!   input.side-effects/dereg-form-input!)
 (def autovalidate-input! input.side-effects/autovalidate-input!)
 (def validate-input!     input.side-effects/validate-input!)
+(def input-changed       input.side-effects/input-changed)
+(def input-left          input.side-effects/input-left)

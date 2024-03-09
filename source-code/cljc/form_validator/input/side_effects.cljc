@@ -95,3 +95,30 @@
                     (-> validation-result f1)
                     (-> validation-result f3))
               (-> validation-result))))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn input-changed
+  ; @description
+  ; Validates the input in case it is registered with the '{:validate-when-change? true}' setting.
+  ;
+  ; @param (keyword) input-id
+  ;
+  ; @usage
+  ; (input-changed :my-input)
+  [input-id]
+  (if (input.env/validate-input-when-change? input-id)
+      (validate-input!                       input-id)))
+
+(defn input-left
+  ; @description
+  ; Validates the input in case it is registered with the '{:validate-when-leave? true}' setting.
+  ;
+  ; @param (keyword) input-id
+  ;
+  ; @usage
+  ; (input-left :my-input)
+  [input-id]
+  (if (input.env/validate-input-when-leave? input-id)
+      (validate-input!                      input-id)))
