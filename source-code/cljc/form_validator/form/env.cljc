@@ -1,7 +1,7 @@
 
 (ns form-validator.form.env
     (:require [fruits.map.api  :as map]
-              [local-state.api :as local-state]))
+              [common-state.api :as common-state]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -20,6 +20,6 @@
   ; @return (keywords in vector)
   [form-id]
   (letfn [(f0 [%] (-> % :form-id (= form-id)))]
-         (-> (local-state/get-state :form-validator :form-inputs)
+         (-> (common-state/get-state :form-validator :form-inputs)
              (map/filter-values f0)
              (map/keys))))

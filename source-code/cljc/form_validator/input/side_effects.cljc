@@ -1,8 +1,7 @@
 
 (ns form-validator.input.side-effects
-    (:require [local-state.api :as local-state]
-              [form-validator.input.env :as input.env]
-              [fruits.map.api :refer [dissoc-in]]))
+    (:require [common-state.api :as common-state]
+              [form-validator.input.env :as input.env]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -27,7 +26,7 @@
   ;                             :get-value-f #(deref MY-ATOM)
   ;                             :validators  [{:error "Please fill out this field!" :test-f #(-> % empty? not)}]})
   [input-id input-props]
-  (local-state/update-state! :form-validator assoc input-id input-props))
+  (common-state/assoc-state! :form-validator input-id input-props))
 
 (defn dereg-form-input!
   ; @description
@@ -38,7 +37,7 @@
   ; @usage
   ; (dereg-form-input! :my-input)
   [input-id]
-  (local-state/update-state! :form-validator dissoc input-id))
+  (common-state/dissoc-state! :form-validator input-id))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -52,7 +51,7 @@
   ; @usage
   ; (autovalidate-input! :my-input)
   [input-id]
-  (local-state/update-state! :form-validator assoc-in [input-id :validate-when-change?] true))
+  (common-state/assoc-state! :form-validator input-id :validate-when-change? true))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -84,8 +83,8 @@
   ;  :input-value (*)}
   [input-id {:keys [on-invalid-f on-valid-f]}]
   (let [validation-result (input.env/get-input-validation-result input-id)]
-       (letfn [(f0 [_] (local-state/update-state! :form-validator dissoc-in [input-id :error]))
-               (f1 [%] (local-state/update-state! :form-validator assoc-in  [input-id :error] (:error %)))
+       (letfn [(f0 [_] (common-state/dissoc-state! :form-validator input-id :error))
+               (f1 [%] (common-state/assoc-state!  :form-validator input-id :error (:error %)))
                (f2 [%] (if on-valid-f   (on-valid-f   (:input-value %))))
                (f3 [%] (if on-invalid-f (on-invalid-f (:input-value %) (:error %))))]
               (when (-> validation-result :input-valid?)

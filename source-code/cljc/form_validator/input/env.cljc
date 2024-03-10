@@ -1,6 +1,6 @@
 
 (ns form-validator.input.env
-    (:require [local-state.api :as local-state]
+    (:require [common-state.api :as common-state]
               [fruits.map.api :as map]
               [fruits.vector.api :as vector]))
 
@@ -20,7 +20,7 @@
   ;
   ; @return (*)
   [input-id]
-  (local-state/get-state :form-validator input-id :error))
+  (common-state/get-state :form-validator input-id :error))
 
 (defn get-input-value
   ; @description
@@ -35,7 +35,7 @@
   ;
   ; @return (*)
   [input-id]
-  (if-let [get-value-f (local-state/get-state :form-validator input-id :get-value-f)]
+  (if-let [get-value-f (common-state/get-state :form-validator input-id :get-value-f)]
           (get-value-f)))
 
 (defn get-input-validators
@@ -54,7 +54,7 @@
   ;   {:error (*)
   ;    :test-f (function)}]
   [input-id]
-  (local-state/get-state :form-validator input-id :validators))
+  (common-state/get-state :form-validator input-id :validators))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -72,7 +72,7 @@
   ;
   ; @return (boolean)
   [input-id]
-  (local-state/get-state :form-validator input-id :validate-when-change?))
+  (common-state/get-state :form-validator input-id :validate-when-change?))
 
 (defn validate-input-when-leave?
   ; @description
@@ -87,7 +87,7 @@
   ;
   ; @return (boolean)
   [input-id]
-  (local-state/get-state :form-validator input-id :validate-when-leave?))
+  (common-state/get-state :form-validator input-id :validate-when-leave?))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
