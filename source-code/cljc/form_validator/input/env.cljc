@@ -120,7 +120,7 @@
         input-validators (get-input-validators input-id)]
        (letfn [(f0 [{:keys [test-f error]}]
                    (if test-f (if-not (-> input-value test-f)
-                                      (-> error (or :invalid-input-value)))))]
+                                      (-> error (or "Invalid value")))))]
               (if-let [error (vector/first-result input-validators f0)]
                       {:input-id input-id :input-value input-value :input-valid? false :error error}
                       {:input-id input-id :input-value input-value :input-valid? true}))))
