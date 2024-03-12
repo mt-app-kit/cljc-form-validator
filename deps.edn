@@ -3,6 +3,6 @@
  :deps  {bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
                                        :sha     "f80092781379e8c0812fc5c23f40a6b30751a5c7"}
          mt-app-kit/cljc-common-state {:git/url "https://github.com/mt-app-kit/cljc-common-state"
-                                       :sha     "b2077cd7695373128ccdb432701d3a720b4f81ea"}
+                                       :sha     "9c3cd2a5780f1927d2d72a25c0b942ab878d4977"}
          org.clojure/clojure          {:mvn/version "1.10.1"}
          org.clojure/clojurescript    {:mvn/version "1.10.891"}}}
