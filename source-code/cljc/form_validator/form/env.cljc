@@ -1,7 +1,7 @@
 
 (ns form-validator.form.env
-    (:require [fruits.map.api  :as map]
-              [common-state.api :as common-state]))
+    (:require [common-state.api :as common-state]
+              [fruits.map.api   :as map]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

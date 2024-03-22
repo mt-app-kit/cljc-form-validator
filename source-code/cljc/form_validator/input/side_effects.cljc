@@ -1,6 +1,6 @@
 
 (ns form-validator.input.side-effects
-    (:require [common-state.api :as common-state]
+    (:require [common-state.api         :as common-state]
               [form-validator.input.env :as input.env]))
 
 ;; ----------------------------------------------------------------------------
