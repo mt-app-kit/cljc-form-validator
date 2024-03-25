@@ -20,6 +20,6 @@
   ; @return (keywords in vector)
   [form-id]
   (letfn [(f0 [%] (-> % :form-id (= form-id)))]
-         (-> (common-state/get-state :form-validator :form-inputs)
+         (-> (common-state/get-state :form-validator :inputs)
              (map/filter-values f0)
              (map/keys))))

@@ -6,7 +6,7 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn reg-form-input!
+(defn reg-input!
   ; @description
   ; Stores the given properties of the input (in the form validator state).
   ;
@@ -16,28 +16,35 @@
   ;  :get-value-f (function)
   ;  :validate-when-change? (boolean)(opt)
   ;  :validate-when-leave? (boolean)(opt)
-  ;  :validators (maps in vector)(opt)
-  ;   [{:error (*)(opt)
-  ;     :test-f (function)}]
-  ;  ...}
+  ;  :validators (keywords and/or maps in vector)(opt)
+  ;   [(keyword or map) validator
+  ;      {:error (*)(opt)
+  ;       :test-f (function)}]
+  ;       ...}
   ;
   ; @usage
-  ; (reg-form-input! :my-input {:form-id     :my-form
-  ;                             :get-value-f #(deref MY-ATOM)
-  ;                             :validators  [{:error "Please fill out this field!" :test-f #(-> % empty? not)}]})
+  ; (reg-input! :my-input {:form-id     :my-form
+  ;                        :get-value-f #(deref MY-ATOM)
+  ;                        :validators  [{:error "Please fill out this field!" :test-f #(-> % empty? not)}]})
+  ;
+  ; @usage
+  ; (reg-validator! :my-validator {:error "Please fill out this field!" :test-f #(-> % empty? not)})
+  ; (reg-input!     :my-input     {:form-id     :my-form
+  ;                                :get-value-f #(deref MY-ATOM)
+  ;                                :validators  [:my-validator]})
   [input-id input-props]
-  (common-state/assoc-state! :form-validator input-id input-props))
+  (common-state/assoc-state! :form-validator :inputs input-id input-props))
 
-(defn dereg-form-input!
+(defn dereg-input!
   ; @description
   ; Removes the properties of the input (from the form validator state).
   ;
   ; @param (keyword) input-id
   ;
   ; @usage
-  ; (dereg-form-input! :my-input)
+  ; (dereg-input! :my-input)
   [input-id]
-  (common-state/dissoc-state! :form-validator input-id))
+  (common-state/dissoc-state! :form-validator :inputs input-id))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -51,7 +58,7 @@
   ; @usage
   ; (autovalidate-input! :my-input)
   [input-id]
-  (common-state/assoc-state! :form-validator input-id :validate-when-change? true))
+  (common-state/assoc-state! :form-validator :inputs input-id :validate-when-change? true))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -83,8 +90,8 @@
   ;  :input-value (*)}
   [input-id {:keys [on-invalid-f on-valid-f]}]
   (let [validation-result (input.env/get-input-validation-result input-id)]
-       (letfn [(f0 [_] (common-state/dissoc-state! :form-validator input-id :error))
-               (f1 [%] (common-state/assoc-state!  :form-validator input-id :error (:error %)))
+       (letfn [(f0 [_] (common-state/dissoc-state! :form-validator :inputs input-id :error))
+               (f1 [%] (common-state/assoc-state!  :form-validator :inputs input-id :error (:error %)))
                (f2 [%] (if on-valid-f   (on-valid-f   (:input-value %))))
                (f3 [%] (if on-invalid-f (on-invalid-f (:input-value %) (:error %))))]
               (when (-> validation-result :input-valid?)

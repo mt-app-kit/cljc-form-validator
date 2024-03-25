@@ -1,9 +1,12 @@
 
 (ns form-validator.api
+    (:refer-clojure :exclude [get-validator])
     (:require [form-validator.form.env           :as form.env]
               [form-validator.form.side-effects  :as form.side-effects]
               [form-validator.input.env          :as input.env]
-              [form-validator.input.side-effects :as input.side-effects]))
+              [form-validator.input.side-effects :as input.side-effects]
+              [form-validator.validator.side-effects :as validator.side-effects]
+              [form-validator.validator.env :as validator.env]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -24,9 +27,15 @@
 (def get-input-validation-result input.env/get-input-validation-result)
 
 ; @redirect (form-validator.input.side-effects/*)
-(def reg-form-input!     input.side-effects/reg-form-input!)
-(def dereg-form-input!   input.side-effects/dereg-form-input!)
+(def reg-input!          input.side-effects/reg-input!)
+(def dereg-input!        input.side-effects/dereg-input!)
 (def autovalidate-input! input.side-effects/autovalidate-input!)
 (def validate-input!     input.side-effects/validate-input!)
 (def input-changed       input.side-effects/input-changed)
 (def input-left          input.side-effects/input-left)
+
+; @redirect (form-validator.validator.env/*)
+(def get-validator validator.env/get-validator)
+
+; @redirect (form-validator.validator.side-effects/*)
+(def reg-validator! validator.side-effects/reg-validator!)

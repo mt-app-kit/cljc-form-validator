@@ -2,7 +2,8 @@
 (ns form-validator.input.env
     (:require [common-state.api  :as common-state]
               [fruits.map.api    :as map]
-              [fruits.vector.api :as vector]))
+              [fruits.vector.api :as vector]
+              [form-validator.validator.env :as validator.env]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -20,7 +21,7 @@
   ;
   ; @return (*)
   [input-id]
-  (common-state/get-state :form-validator input-id :error))
+  (common-state/get-state :form-validator :inputs input-id :error))
 
 (defn get-input-value
   ; @description
@@ -35,7 +36,7 @@
   ;
   ; @return (*)
   [input-id]
-  (if-let [get-value-f (common-state/get-state :form-validator input-id :get-value-f)]
+  (if-let [get-value-f (common-state/get-state :form-validator :inputs input-id :get-value-f)]
           (get-value-f)))
 
 (defn get-input-validators
@@ -54,7 +55,10 @@
   ;   {:error (*)
   ;    :test-f (function)}]
   [input-id]
-  (common-state/get-state :form-validator input-id :validators))
+  (letfn [(f0 [%] (cond (-> % map?)     (-> %)
+                        (-> % keyword?) (-> % validator.env/get-validator)))]
+         (if-let [validators (common-state/get-state :form-validator :inputs input-id :validators)]
+                 (vector/->items validators f0))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -72,7 +76,7 @@
   ;
   ; @return (boolean)
   [input-id]
-  (common-state/get-state :form-validator input-id :validate-when-change?))
+  (common-state/get-state :form-validator :inputs input-id :validate-when-change?))
 
 (defn validate-input-when-leave?
   ; @description
@@ -87,7 +91,7 @@
   ;
   ; @return (boolean)
   [input-id]
-  (common-state/get-state :form-validator input-id :validate-when-leave?))
+  (common-state/get-state :form-validator :inputs input-id :validate-when-leave?))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
