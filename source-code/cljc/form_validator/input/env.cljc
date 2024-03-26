@@ -55,10 +55,9 @@
   ;   {:error (*)
   ;    :test-f (function)}]
   [input-id]
-  (letfn [(f0 [%] (cond (-> % map?)     (-> %)
-                        (-> % keyword?) (-> % validator.env/get-validator)))]
+  (letfn [(f0 [%] (validator.env/use-validator input-id %))]
          (if-let [validators (common-state/get-state :form-validator :inputs input-id :validators)]
-                 (vector/->items validators f0))))
+                 (-> validators (vector/->items f0)))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
