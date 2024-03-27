@@ -1,12 +1,12 @@
 
 (ns form-validator.api
     (:refer-clojure :exclude [get-validator])
-    (:require [form-validator.form.env           :as form.env]
-              [form-validator.form.side-effects  :as form.side-effects]
-              [form-validator.input.env          :as input.env]
-              [form-validator.input.side-effects :as input.side-effects]
-              [form-validator.validator.side-effects :as validator.side-effects]
-              [form-validator.validator.env :as validator.env]))
+    (:require [form-validator.form.env               :as form.env]
+              [form-validator.form.side-effects      :as form.side-effects]
+              [form-validator.input.env              :as input.env]
+              [form-validator.input.side-effects     :as input.side-effects]
+              [form-validator.validator.env          :as validator.env]
+              [form-validator.validator.side-effects :as validator.side-effects]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

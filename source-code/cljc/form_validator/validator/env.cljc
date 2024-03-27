@@ -1,7 +1,7 @@
 
 (ns form-validator.validator.env
     (:refer-clojure :exclude [get-validator])
-    (:require [common-state.api :as common-state]
+    (:require [common-state.api                  :as common-state]
               [form-validator.validator.messages :as validator.messages]))
 
 ;; ----------------------------------------------------------------------------
