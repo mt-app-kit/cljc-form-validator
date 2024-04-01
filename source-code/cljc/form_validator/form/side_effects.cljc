@@ -7,23 +7,6 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn autovalidate-form!
-  ; @description
-  ; Sets the ':validate-when-change?' property to TRUE of all inputs associated with the given form ID,
-  ; to ensure that the inputs are getting validated when their value changes.
-  ;
-  ; @param (keyword) form-id
-  ;
-  ; @usage
-  ; (autovalidate-form! :my-form)
-  [form-id]
-  (let [form-inputs (form.env/get-form-inputs form-id)]
-       (doseq [input-id form-inputs]
-              (input.side-effects/autovalidate-input! input-id))))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
 (defn validate-form!
   ; @description
   ; Applies the validators of all inputs associated with the given form ID, and ...
@@ -33,15 +16,23 @@
   ; ... in case of ANY input is invalid, fires the given ':on-invalid-f' function.
   ;
   ; @param (keyword) form-id
-  ; @param (keyword) validation-props
+  ; @param (keyword)(opt) validation-props
   ; {:on-invalid-f (function)(opt)
   ;  :on-valid-f (function)(opt)}
   ;
   ; @usage
-  ; (validate-form! :my-form {...})
+  ; (def MY-VALIDATOR {:error "Please fill out this field!" :test-f #(-> % empty? not)})
+  ; (reg-input!     :my-input {:form-id :my-form :get-value-f #(deref MY-ATOM) :validators [MY-VALIDATOR]})
+  ; (validate-form! :my-form  {...})
   ; =>
-  ; [{:input-id :my-input :input-value "..." :input-valid? true}
-  ;  ...]
+  ; [{:input-id :my-input :input-value "My value" :input-valid? true}]
+  ;
+  ; @usage
+  ; (reg-validator! :my-validator {:error "Please fill out this field!" :test-f #(-> % empty? not)})
+  ; (reg-input!     :my-input     {:form-id :my-form :get-value-f #(deref MY-ATOM) :validators [:my-validator]})
+  ; (validate-form! :my-form      {...})
+  ; =>
+  ; [{:input-id :my-input :input-value "My value" :input-valid? true}]
   ;
   ; @return (maps in vector)
   ; [(map) validation-result
@@ -49,13 +40,16 @@
   ;    :input-id (keyword)
   ;    :input-valid? (boolean)
   ;    :input-value (*)}]
-  [form-id {:keys [on-invalid-f on-valid-f] :as validation-props}]
-  (let [form-inputs (form.env/get-form-inputs form-id)]
-       (letfn [(f0 [input-id] (input.side-effects/validate-input! input-id {}))]
-              (let [validation-results (vector/->items form-inputs f0)]
-                   (letfn [(f0 [_] (if on-valid-f   (on-valid-f)))
-                           (f1 [_] (if on-invalid-f (on-invalid-f)))]
-                          (if (-> validation-results (vector/all-items-match? :input-valid?))
-                              (-> validation-results f0)
-                              (-> validation-results f1)))
-                   (-> validation-results)))))
+  ([form-id]
+   (validate-form! form-id {}))
+
+  ([form-id {:keys [on-invalid-f on-valid-f]}]
+   (let [form-inputs (form.env/get-form-inputs form-id)]
+        (letfn [(f0 [input-id] (input.side-effects/validate-input! input-id))]
+               (let [validation-results (vector/->items form-inputs f0)]
+                    (letfn [(f0 [_] (if on-valid-f   (on-valid-f)))
+                            (f1 [_] (if on-invalid-f (on-invalid-f)))]
+                           (if (-> validation-results (vector/all-items-match? :input-valid?))
+                               (-> validation-results f0)
+                               (-> validation-results f1)))
+                    (-> validation-results))))))

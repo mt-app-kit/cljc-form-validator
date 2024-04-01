@@ -5,7 +5,7 @@
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
- 
+
 (defn get-form-inputs
   ; @description
   ; Returns the IDs of inputs associated with the given form ID.
@@ -13,6 +13,8 @@
   ; @param (keyword) form-id
   ;
   ; @usage
+  ; (reg-input! :my-input      {:form-id :my-form ...})
+  ; (reg-input! :another-input {:form-id :my-form ...})
   ; (get-form-inputs :my-form)
   ; =>
   ; [:my-input :another-input]
